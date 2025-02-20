@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mobile Barcode Generator</title>
+  <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.5/dist/JsBarcode.all.min.js"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px;
+    }
+    h1 {
+      font-size: 24px;
+    }
+    input {
+      padding: 10px;
+      font-size: 16px;
+      width: 100%;
+      max-width: 300px;
+      margin-bottom: 10px;
+    }
+    button {
+      padding: 10px;
+      font-size: 16px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #45a049;
+    }
+    #fullNameDisplay {
+      font-size: 18px;
+      margin-top: 20px;
+      font-weight: bold;
+    }
+    #studentIdMessage {
+      font-size: 16px;
+      margin-top: 10px;
+      color: #d32f2f;
+      font-weight: bold;
+    }
+    svg {
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Mobile Barcode Generator</h1>
+  <div id="inputContainer">
+    <input type="text" id="firstName" placeholder="Enter First Name" />
+    <input type="text" id="middleInitial" placeholder="Enter M.I." />
+    <input type="text" id="lastName" placeholder="Enter Last Name" />
+    <input type="text" id="barcodeData" placeholder="Enter text or numbers" />
+    <button onclick="generateBarcode()">Generate Barcode</button>
+  </div>
+  <div id="fullNameDisplay"></div>
+  <svg id="barcode"></svg>
+  <div id="studentIdMessage" style="display: none;">Please present a Student ID on the Counter</div>
+
+  <script>
+    function generateBarcode() {
+      const firstName = document.getElementById('firstName').value.trim().toUpperCase();
+      const middleInitial = document.getElementById('middleInitial').value.trim().toUpperCase();
+      const lastName = document.getElementById('lastName').value.trim().toUpperCase();
+      const data = document.getElementById('barcodeData').value.trim();
+
+      if (firstName === "") {
+        alert("Please enter your first name.");
+        return;
+      }
+      if (lastName === "") {
+        alert("Please enter your last name.");
+        return;
+      }
+      if (data === "") {
+        alert("Please enter valid data for the barcode.");
+        return;
+      }
+
+      // Construct the full name
+      let fullName = firstName;
+      if (middleInitial !== "") {
+        fullName += " " + middleInitial;
+      }
+      fullName += " " + lastName;
+
+      // Display the full name above the barcode
+      document.getElementById('fullNameDisplay').textContent = fullName;
+
+      // Generate the barcode
+      JsBarcode("#barcode", data, {
+        format: "CODE128",
+        lineColor: "#000",
+        width: 2,
+        height: 50,
+        displayValue: true
+      });
+
+      // Hide the input fields and button
+      document.getElementById('inputContainer').style.display = 'none';
+
+      // Show the student ID message
+      document.getElementById('studentIdMessage').style.display = 'block';
+    }
+  </script>
+</body>
+</html>
